@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tower of Hanoi – Prolog Backend</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>🗼 Tower of Hanoi</h1>
+    <p class="subtitle">Frontend: HTML, CSS, JavaScript · Backend: SWI-Prolog</p>
+    <button id="helpBtn" class="btn secondary">❓ How to Play</button>
+  </header>
+
+  <main>
+    <!-- Top bar: disk count, mode tabs, counters -->
+    <section class="panel top-bar">
+      <label>
+        Disks
+        <select id="diskSelect">
+          <option>1</option><option>2</option><option selected>3</option>
+          <option>4</option><option>5</option><option>6</option>
+          <option>7</option><option>8</option>
+        </select>
+      </label>
+
+      <div class="tabs">
+        <button id="tabAuto" class="tab active">🤖 Auto-solve</button>
+        <button id="tabPlay" class="tab">🎮 Play</button>
+      </div>
+
+      <div class="stats">
+        Moves: <b id="moves">0</b> · Minimum: <b id="minMoves">7</b>
+      </div>
+    </section>
+
+    <!-- Auto-solve controls -->
+    <section id="autoControls" class="panel controls">
+      <button id="startBtn" class="btn primary">▶ Solve / Start</button>
+      <button id="pauseBtn" class="btn" disabled>⏸ Pause</button>
+      <button id="resetBtn" class="btn">↺ Reset</button>
+      <label class="speed">
+        Speed
+        <input type="range" id="speed" min="1" max="10" value="5" />
+      </label>
+    </section>
+
+    <!-- Play controls -->
+    <section id="playControls" class="panel controls" hidden>
+      <button id="hintBtn" class="btn">💡 Hint</button>
+      <button id="resetBtn2" class="btn">↺ New game</button>
+      <span class="small">Click a peg, then click where to move the top disk — or drag the top disk.</span>
+    </section>
+
+    <p id="message" class="message" aria-live="polite"></p>
+
+    <!-- The game board -->
+    <div class="board-wrap">
+      <div id="board" class="board">
+        <div class="zone" data-peg="0"></div>
+        <div class="zone" data-peg="1"></div>
+        <div class="zone" data-peg="2"></div>
+        <div class="base"></div>
+      </div>
+      <div class="labels">
+        <span>Left (start)</span>
+        <span>Middle</span>
+        <span>Right (goal)</span>
+      </div>
+
+      <div id="win" class="win" hidden>
+        <h2>🎉 You won!</h2>
+        <p id="winText"></p>
+        <button id="playAgainBtn" class="btn primary">Play again</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Tutorial / How to Play -->
+  <dialog id="tutorial">
+    <h2>How to Play</h2>
+
+    <h3>🎯 Goal</h3>
+    <p>Move the whole stack of disks from the <b>left</b> peg to the <b>right</b> peg.</p>
+
+    <h3>📜 Rules</h3>
+    <ol>
+      <li>Move only <b>one disk</b> at a time.</li>
+      <li>You can only move the <b>top disk</b> of a peg.</li>
+      <li>Never put a <b>bigger disk on a smaller disk</b>.</li>
+    </ol>
+
+    <h3>🔢 Minimum number of moves</h3>
+    <p>With <b>n</b> disks you need at least <b>2ⁿ − 1</b> moves.</p>
+    <table>
+      <tr><th>Disks</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+      <tr><th>Moves</th><td>1</td><td>3</td><td>7</td><td>15</td><td>31</td><td>63</td><td>127</td><td>255</td></tr>
+    </table>
+
+    <h3>💡 Tips</h3>
+    <ul>
+      <li>Start with 3 disks, then try more.</li>
+      <li>The smallest disk moves every second turn.</li>
+      <li>With an <b>odd</b> number of disks, the smallest disk goes left → right → middle → left…
+          With an <b>even</b> number, it goes left → middle → right → left…</li>
+      <li>Stuck? Press <b>Hint</b> in Play mode.</li>
+    </ul>
+
+    <div class="dialog-buttons">
+      <button id="demoBtn" class="btn primary">▶ Watch a 3-disk demo</button>
+      <button id="closeBtn" class="btn">Close</button>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

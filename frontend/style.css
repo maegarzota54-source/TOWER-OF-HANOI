@@ -1,0 +1,210 @@
+:root {
+  --bg: #f4f1ea;
+  --card: #ffffff;
+  --ink: #2b2b2b;
+  --accent: #3b82f6;
+  --accent-dark: #2563eb;
+  --wood: #8b6b4a;
+  --wood-dark: #6b4f33;
+  --danger: #ef4444;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+header { text-align: center; padding: 24px 16px 8px; }
+header h1 { margin: 0; font-size: 2rem; }
+.subtitle { margin: 4px 0 12px; color: #666; }
+
+main { max-width: 780px; margin: 0 auto; padding: 8px 16px 40px; }
+
+.panel {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.top-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+select {
+  font-size: 1rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.tabs { display: flex; gap: 6px; }
+.tab {
+  border: none;
+  background: #e7e5e0;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.tab.active { background: var(--accent); color: #fff; }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn {
+  border: none;
+  background: #e7e5e0;
+  color: var(--ink);
+  padding: 9px 16px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s;
+}
+.btn:hover:not(:disabled) { background: #d9d6cf; }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover:not(:disabled) { background: var(--accent-dark); }
+.btn.secondary { background: #fff; border: 1px solid #ccc; }
+
+.speed { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.small { font-size: 0.85rem; color: #666; }
+
+.message {
+  min-height: 1.5em;
+  text-align: center;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+/* ---------- Board ---------- */
+.board-wrap { position: relative; }
+
+.board {
+  position: relative;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(#dbeafe, #f0f9ff);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 33.3333%;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.zone:nth-child(1) { left: 0; }
+.zone:nth-child(2) { left: 33.3333%; }
+.zone:nth-child(3) { left: 66.6666%; }
+.zone.hint { background: rgba(250, 204, 21, 0.3); }
+
+/* the pole of each peg */
+.zone::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  width: 10px;
+  height: 222px;
+  transform: translateX(-50%);
+  background: var(--wood);
+  border-radius: 6px 6px 0 0;
+}
+
+.base {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 16px;
+  background: var(--wood-dark);
+}
+
+.labels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 6px;
+}
+
+/* ---------- Disks ---------- */
+.disk {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 22px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  will-change: transform;
+  touch-action: none;
+}
+.mode-play .disk { cursor: grab; }
+.disk.selected { box-shadow: 0 0 0 3px #facc15, 0 2px 6px rgba(0, 0, 0, 0.4); }
+.disk.dragging { cursor: grabbing; }
+
+.board.shake { animation: shake 0.4s; }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* ---------- Win banner ---------- */
+.win {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.96);
+  padding: 20px 28px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  z-index: 50;
+}
+.win h2 { margin: 0 0 8px; }
+
+/* ---------- Tutorial dialog ---------- */
+dialog {
+  max-width: 520px;
+  width: calc(100% - 32px);
+  border: none;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+dialog::backdrop { background: rgba(0, 0, 0, 0.45); }
+dialog h2 { margin-top: 0; }
+dialog h3 { margin-bottom: 4px; }
+dialog table { border-collapse: collapse; width: 100%; text-align: center; }
+dialog th, dialog td { border: 1px solid #ddd; padding: 4px; }
+.dialog-buttons { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
