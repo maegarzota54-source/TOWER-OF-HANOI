@@ -10,12 +10,29 @@
 :- use_module(library(http/http_parameters)).
 :- use_module(library(http/http_cors)).
 :- use_module(library(settings)).
+:- use_module(library(http/http_files)).
 
 % Allow any website (our frontend) to call this API.
 :- set_setting(http:cors, [*]).
 
 % Route: /solve  ->  handle_solve/1
 :- http_handler(root(solve), handle_solve, []).
+
+% Route: everything else -> files from the ../frontend folder.
+% (So the website AND the API run from one server, which Render needs.)
+:- dynamic frontend_dir/1.
+:- prolog_load_context(directory, Dir),
+   absolute_file_name('../frontend', Front,
+                      [relative_to(Dir), file_type(directory)]),
+   assertz(frontend_dir(Front)).
+
+:- http_handler(root(.), serve_frontend, [prefix]).
+
+serve_frontend(Request) :-
+    frontend_dir(Dir),
+    http_reply_from_files(Dir, [], Request).
+serve_frontend(Request) :-
+    http_404([], Request).
 
 % -----------------------------------------------
 %  hanoi(+N, +Pegs, -Moves, ?Rest)
@@ -60,10 +77,16 @@ handle_solve(Request) :-
 % -----------------------------------------------
 %  Start the server
 % -----------------------------------------------
+% Render gives us the port in the PORT environment variable.
+% On your own computer there is no PORT, so we use 8000.
 start_server :-
-    Port = 8000,
+    (   getenv('PORT', Text), atom_number(Text, Port)
+    ->  true
+    ;   Port = 8000
+    ),
     http_server(http_dispatch, [port(Port)]),
     format("Hanoi server running at http://localhost:~w~n", [Port]),
-    format("Try: http://localhost:~w/solve?disks=3~n", [Port]).
+    format("Website: http://localhost:~w/~n", [Port]),
+    format("API test: http://localhost:~w/solve?disks=3~n", [Port]).
 
 :- initialization(start_server).

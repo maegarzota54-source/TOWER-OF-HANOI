@@ -7,7 +7,13 @@
    ===================================================== */
 
 // ---------- Settings ----------
-const API_URL = "http://localhost:8000";   // Prolog server address
+// If the page is served by the Prolog server itself (localhost:8000 or Render),
+// use a relative URL. Otherwise (Live Server, double-click) call localhost:8000.
+const servedByProlog =
+  location.protocol.startsWith("http") &&
+  (location.port === "8000" ||
+   !["localhost", "127.0.0.1"].includes(location.hostname));
+const API_URL = servedByProlog ? "" : "http://localhost:8000";
 const DISK_H = 24;                          // vertical space per disk (px)
 const BASE_H = 16;                          // height of the wooden base (px)
 const LIFT_Y = 12;                          // height where disks travel (px from top)
