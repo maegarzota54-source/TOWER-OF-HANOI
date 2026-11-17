@@ -2,7 +2,7 @@
 
 TOWER OF HANOI!
 
-🌐 **Live Demo:** [Play here](https://YOUR-APP-NAME.onrender.com)
+🌐 **Live Demo:** [Play here] (https://tower-of-hanoi-2.onrender.com)
 
 Built with SWI-Prolog (backend) and vanilla JavaScript (frontend), deployed on Render.
 
